@@ -190,12 +190,19 @@ img { width: 100%; height: auto; display: block; }
 #q1-content {
     position: relative;
     width: 100%;
-    max-width: 402px; /* これですべての要素が背景の幅に収まります */
+    max-width: 402px;
+    height: 100vh;
     margin: 0 auto;
     z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
+    
+    /* 上に10vh、左右0、下に40pxの余白を設定 */
+    padding: 0 0 240px; 
+    
+    box-sizing: border-box;
 }
 
 .q1-title {
@@ -307,12 +314,13 @@ img { width: 100%; height: auto; display: block; }
     font-weight: normal;
 }
 
-/* ボタンの配置 */
+/* ボタンエリアの微調整 */
 .button-group {
     position: relative;
     width: 80%;
     display: flex;
     justify-content: space-around;
+    /* padding-bottom: 2vh; は削除してOKです */
 }
 
 .btn-return, .btn-go {
