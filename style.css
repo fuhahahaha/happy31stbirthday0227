@@ -285,8 +285,8 @@ img { width: 100%; height: auto; display: block; }
 .input-area {
     position: relative;
     width: 90%;          /* 背景幅の90% */
-    margin-top: 40px;    /* お皿からの距離（見た目で微調整してください） */
-    margin-bottom: 50px; /* 下のボタンとの距離 */
+    margin-top: 10px;    /* お皿からの距離（見た目で微調整してください） */
+    margin-bottom: 10px; /* 下のボタンとの距離 */
     display: flex;
     justify-content: center;
     z-index: 5;
