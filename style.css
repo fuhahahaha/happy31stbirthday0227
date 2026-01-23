@@ -292,26 +292,35 @@ img { width: 100%; height: auto; display: block; }
     z-index: 5;
 }
 
-/* 回答入力欄本体：白くて丸いデザイン */
+/* 回答入力欄本体：グラスモーフィズムデザイン */
 #ans1 {
     width: 100%;
-    padding: 18px 25px;   /* 内側に余裕を持たせる */
-    border-radius: 50px;  /* 左右を完全に丸くする */
-    border: none;
-    background: white;
+    padding: 18px 25px;
+    border-radius: 50px;
     
-    /* デザイン画像のような、ふわっとした影をつける */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    /* 背景を半透明の白にする */
+    background: rgba(255, 255, 255, 0.1); 
+    
+    /* 背景をぼかす（これがグラスモーフィズムの肝！） */
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px); /* Safari用 */
+    
+    /* ガラスの質感を出すための細い境界線 */
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    
+    /* 影も少し控えめにすると透明感が際立ちます */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     
     font-size: 1.2rem;
-    text-align: center;   /* 文字を中央から入力させる */
-    outline: none;        /* タップした時の青い枠を消す */
-    color: #333;          /* 入力文字の色 */
+    text-align: center;
+    outline: none;
+    color: white; /* 背景が透けるので文字は白の方が見えやすいかも */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); /* 文字の視認性アップ */
 }
 
-/* 「回答を入力」というプレースホルダーの色を薄くする */
+/* プレースホルダーの色も白っぽく調整 */
 #ans1::placeholder {
-    color: #ccc;
+    color: rgba(255, 255, 255, 0.8);
     font-weight: normal;
 }
 
