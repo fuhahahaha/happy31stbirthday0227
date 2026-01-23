@@ -3,159 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test: Shake & Flash Effect</title>
+    <title>Yuji's Birthday Quest</title>
     <style>
-        body { 
-            background-color: #1a1a1a; 
-            color: white; 
-            font-family: 'Helvetica Neue', Arial, sans-serif; 
-            text-align: center; 
-            margin: 0; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            height: 100vh; 
-            overflow: hidden; 
-            transition: background-color 0.1s;
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
         }
 
-        .container { 
-            width: 85%; 
-            max-width: 400px; 
-            border: 3px solid #ff0000; 
-            padding: 40px 20px; 
-            background: #2b2b2b; 
-            box-shadow: 0 0 25px rgba(255,0,0,0.4); 
-            border-radius: 20px;
-            position: relative;
+        /* パーツの共通設定（最初は透明で少し下に配置） */
+        .float-item {
+            position: absolute;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
         }
 
-        /* ★ガタガタ揺れるアニメーション★ */
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        /* 画面表示時にふわっと浮き上がるアニメーション */
+        .appear {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
         }
 
-        /* ★暗転（点滅）アニメーション★ */
-        @keyframes flash {
-            0%, 20%, 40%, 60%, 80%, 100% { background-color: #000; }
-            10%, 30%, 50%, 70%, 90% { background-color: #1a1a1a; }
+        /* 配置の調整（最新iPhone Proの画面サイズを想定） */
+        #items { width: 90%; top: 5%; left: 5%; transition-delay: 0.2s; }
+        #iron { width: 80%; top: 40%; left: 10%; transition-delay: 0.5s; }
+        #mission { width: 70%; bottom: 25%; left: 15%; transition-delay: 0.8s; }
+        #btn-container { width: 80%; bottom: 5%; left: 10%; transition-delay: 1.1s; }
+
+        img { width: 100%; height: auto; }
+
+        /* 赤いボタンのスタイルと押下感 */
+        #start-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            outline: none;
+            transition: transform 0.1s;
         }
 
-        /* エフェクト実行用のクラス */
-        .effect-shake { animation: shake 0.2s infinite; }
-        .effect-flash { animation: flash 1s step-end 1; }
+        /* ボタンを押した瞬間に凹む演出 */
+        #start-btn:active {
+            transform: scale(0.92);
+            filter: brightness(0.8);
+        }
 
-        h1 { color: #ff0000; font-size: 1.6rem; letter-spacing: 2px; }
         .hidden { display: none; }
-
-        button { 
-            background: #ff0000; 
-            color: white; 
-            border: none; 
-            padding: 15px 40px; 
-            font-size: 1.1rem; 
-            cursor: pointer; 
-            margin-top: 25px; 
-            font-weight: bold;
-            border-radius: 50px; 
-            transition: all 0.1s; 
-            box-shadow: 0 6px 0 #b30000;
-        }
-
-        button:active {
-            transform: translateY(4px);
-            box-shadow: 0 2px 0 #b30000;
-        }
-
-        input { 
-            padding: 12px; 
-            width: 80%; 
-            font-size: 1.1rem; 
-            margin-top: 15px; 
-            background: #f0f0f0; 
-            color: #333; 
-            border: none; 
-            border-radius: 8px;
-            text-align: center; 
-        }
-
-        #animation-overlay { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            display: none; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 3.5rem; 
-            font-weight: bold; 
-            z-index: 10; 
-        }
-        .correct { color: #00ff00; text-shadow: 0 0 20px #00ff00; }
-        .wrong { color: #ff0000; text-shadow: 0 0 20px #ff0000; }
     </style>
 </head>
-<body id="body-bg">
+<body onload="startAnimation()">
 
-<div id="animation-overlay"></div>
-
-<div class="container" id="main-container">
-    <div id="screen-q1">
-        <p>Q1. 二人の記念日は？</p>
-        <input type="text" id="ans1" placeholder="0000" inputmode="numeric">
-        <br><button onclick="checkAnswer(1, '0825', 'screen-goal')">ANSWER</button>
-    </div>
-
-    <div id="screen-goal" class="hidden">
-        <h1 style="color: #00ff00;">CLEAR!!</h1>
-        <p>正解！次のヒントへ進んでね。</p>
-    </div>
-</div>
-
-<script>
-    function checkAnswer(qNum, correctAns, nextId) {
-        const userAns = document.getElementById('ans' + qNum).value;
-        const overlay = document.getElementById('animation-overlay');
-        const container = document.getElementById('main-container');
-        const bodyBg = document.getElementById('body-bg');
+    <div id="screen-top">
+        <div id="items" class="float-item"><img src="items.png" alt="items"></div>
+        <div id="iron" class="float-item"><img src="iron.png" alt="handagote"></div>
+        <div id="mission" class="float-item"><img src="missionhandagote.png" alt="mission"></div>
         
-        if (userAns === correctAns) {
-            overlay.innerHTML = "<span class='correct'>正解！</span>";
-            overlay.style.backgroundColor = "rgba(0,0,0,0.85)";
-            overlay.style.display = "flex";
-            setTimeout(() => {
-                overlay.style.display = "none";
-                document.getElementById('screen-q1').classList.add('hidden');
-                document.getElementById(nextId).classList.remove('hidden');
-            }, 1200);
-        } else {
-            // ★不正解時のエフェクト開始★
-            overlay.innerHTML = "<span class='wrong'>ERROR</span>";
-            overlay.style.backgroundColor = "transparent"; // 背景が見えるように
-            overlay.style.display = "flex";
-            
-            container.classList.add('effect-shake'); // 揺らす
-            bodyBg.classList.add('effect-flash'); // 暗転させる
+        <div id="btn-container" class="float-item">
+            <button id="start-btn" onclick="goToQuest()">
+                <img src="button-red.png" alt="START">
+            </button>
+        </div>
+    </div>
 
+    <script>
+        // ページ読み込み時にパーツを順番に浮かび上がらせる
+        function startAnimation() {
             setTimeout(() => {
-                // 1秒後にエフェクトを解除
-                overlay.style.display = "none";
-                container.classList.remove('effect-shake');
-                bodyBg.classList.remove('effect-flash');
-            }, 1000);
+                document.querySelectorAll('.float-item').forEach(el => el.classList.add('appear'));
+            }, 100);
         }
-    }
-</script>
+
+        // ボタンを押したら謎解きページへ（URLを飛ばすか、画面を切り替える）
+        function goToQuest() {
+            // ここに、次のクイズ画面への切り替え処理を書く
+            alert("ミッション開始！次の謎解きページへ移動します。");
+            // window.location.href = "quest.html"; // 別ページにする場合
+        }
+    </script>
 </body>
 </html>
