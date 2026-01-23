@@ -1,0 +1,135 @@
+/* --- 全体レイアウト --- */
+body {
+    margin: 0; padding: 0;
+    background: url('bg.png') repeat;
+    background-size: 300px;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.container {
+    position: relative;
+    width: 100vw;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 30px;
+}
+
+/* --- アニメーションパーツ --- */
+.float-item {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.appear {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+#items {
+    width: 100%;
+    z-index: 1;
+    transition-delay: 0.2s;
+}
+#items img {
+    animation: yura-yura 3s infinite ease-in-out;
+    transform-origin: center center;
+}
+
+#iron {
+    width: 80%;
+    z-index: 2;
+    margin-top: -120px; 
+    margin-left: auto;
+    margin-right: 0%;
+    transition-delay: 0.5s;
+}
+#iron img {
+    animation: gatagata 2.5s infinite ease-in-out;
+}
+
+#bottom-group {
+    width: 80%;
+    z-index: 3;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition-delay: 0.8s;
+}
+
+#mission-img { 
+    width: 90%; 
+    margin-bottom: 30px !important; 
+    animation: neon-flicker 3s infinite;
+}
+
+#start-btn {
+    width: 80%; background: none; border: none; padding: 0;
+    cursor: pointer; outline: none; transition: transform 0.1s;
+    position: relative; z-index: 10;
+}
+#start-btn:active { transform: scale(0.92); filter: brightness(0.8); }
+
+img { width: 100%; height: auto; display: block; }
+
+/* --- 演出用アニメーション --- */
+@keyframes yura-yura {
+    0%, 100% { transform: rotate(-1.5deg); }
+    50% { transform: rotate(1.5deg); }
+}
+
+@keyframes gatagata {
+    0%, 40% { transform: rotate(0deg); }
+    5%, 15%, 25%, 35% { transform: rotate(2deg) translate(2px, -1px); }
+    10%, 20%, 30% { transform: rotate(-2deg) translate(-1px, 2px); }
+    40%, 100% { transform: rotate(0deg); }
+}
+
+@keyframes neon-flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; filter: brightness(1.2); }
+    20%, 22%, 24%, 55% { opacity: 0.3; filter: brightness(0.8); }
+}
+
+/* --- 画面遷移演出 --- */
+#transition-layer {
+    position: fixed;
+    top: 0; 
+    left: 0; 
+    width: 100vw; 
+    height: 100vh;
+    background-color: black;
+    z-index: 9999;
+    pointer-events: none; 
+    clip-path: circle(0% at 50% 50%);
+    transition: clip-path 0.8s ease-in-out;
+}
+
+#transition-layer.active {
+    clip-path: circle(150% at 50% 50%);
+}
+
+#quest-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 3rem;
+    font-weight: bold;
+    z-index: 9998;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none; 
+}
