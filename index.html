@@ -2,87 +2,177 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Yuji's Birthday Quest</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            background: url('bg.png') repeat center center fixed;
-            background-size: cover;
-            height: 100vh;
-            overflow: hidden;
+            margin: 0; padding: 0;
+            background: url('bg.png') repeat;
+            background-size: 300px;
+            display: flex;
+            justify-content: center;
+            /* スクロールできるように align-items: center は外します */
+            min-height: 100vh;
             font-family: 'Helvetica Neue', Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* パーツの共通設定（最初は透明で少し下に配置） */
+        /* 全体コンテナ：スクロール可能にする */
+        .container {
+            position: relative;
+            width: 100vw;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 30px; /* #bottom-groupの下に30pxの余白 */
+        }
+
         .float-item {
-            position: absolute;
             opacity: 0;
             transform: translateY(30px);
             transition: all 0.8s ease-out;
+            width: 100%;
+            display: flex;
+            justify-content: center;
         }
 
-        /* 画面表示時にふわっと浮き上がるアニメーション */
         .appear {
             opacity: 1 !important;
             transform: translateY(0) !important;
         }
 
-        /* 配置の調整（最新iPhone Proの画面サイズを想定） */
-        #items { width: 90%; top: 5%; left: 5%; transition-delay: 0.2s; }
-        #iron { width: 80%; top: 40%; left: 10%; transition-delay: 0.5s; }
-        #mission { width: 70%; bottom: 25%; left: 15%; transition-delay: 0.8s; }
-        #btn-container { width: 80%; bottom: 5%; left: 10%; transition-delay: 1.1s; }
+        /* --- 各パーツの配置 --- */
 
-        img { width: 100%; height: auto; }
+        #items {
+            width: 100%;
+            z-index: 1; /* 重なり順の基本 */
+            transition-delay: 0.2s;
+        }
 
-        /* 赤いボタンのスタイルと押下感 */
+        #iron {
+            width: 80%;
+            z-index: 2; 
+            margin-top: -120px; 
+            margin-right: 0%;
+            margin-left: auto;
+            transition-delay: 0.5s;
+        }
+
+        #bottom-group {
+            width: 80%;
+            z-index: 3;
+            /* #items(のさらに下の#iron)から10px下に置く */
+            /* ironの重なり分(-40px)を考慮して、itemsから数えて10px下になるよう調整 */ 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition-delay: 0.8s;
+        }
+
+        #mission-img { width: 90%; margin-bottom: 20px !important; }
+        
         #start-btn {
-            background: none;
-            border: none;
-            padding: 0;
-            cursor: pointer;
-            outline: none;
-            transition: transform 0.1s;
+            width: 80%; background: none; border: none; padding: 0;
+            cursor: pointer; outline: none; transition: transform 0.1s;
+            touch-action: manipulation;
+        }
+        #start-btn:active { transform: scale(0.92); filter: brightness(0.8); }
+
+        img { width: 100%; height: auto; display: block; }
+
+
+        /* 3秒かけてゆっくり左右に揺れる動き */
+        @keyframes yura-yura {
+            0%, 100% { transform: rotate(-1.5deg); } /* 左に少し傾く */
+            50% { transform: rotate(1.5deg); }      /* 右に少し傾く */
         }
 
-        /* ボタンを押した瞬間に凹む演出 */
-        #start-btn:active {
-            transform: scale(0.92);
-            filter: brightness(0.8);
+        /* アイテム全体にアニメーションを適用 */
+        #items img {
+            /* 3秒周期で、滑らかに（ease-in-out）繰り返す */
+            animation: yura-yura 3s infinite ease-in-out;
+            transform-origin: center center;
         }
 
-        .hidden { display: none; }
+        /* ガタガタ震える動きの定義 */
+        @keyframes gatagata {
+            0%, 40% { transform: rotate(0deg); } /* 1秒(40%)の間ガタガタさせる */
+            5%  { transform: rotate(2deg) translate(2px, -1px); }
+            10% { transform: rotate(-2deg) translate(-1px, 2px); }
+            15% { transform: rotate(3deg) translate(1px, 1px); }
+            20% { transform: rotate(-3deg) translate(-2px, -2px); }
+            25% { transform: rotate(2deg) translate(0px, 0px); }
+            30% { transform: rotate(-2deg) translate(1px, -1px); }
+            35% { transform: rotate(1deg) translate(-1px, 1px); }
+            40% { transform: rotate(0deg); } /* ここまでで1秒 */
+            100% { transform: rotate(0deg); } /* 残りの1.5秒(60%)は静止 */
+        }
+
+        /* ハンダゴテにアニメーションを適用 */
+        #iron img {
+            /* 1秒(動) + 1.5秒(静) = 合計2.5秒のサイクル */
+            animation: gatagata 2.5s infinite ease-in-out;
+            transform-origin: center center; /* 中心を軸に震わせる */
+        }
+
+        /* 電球がチカチカするような不規則な点滅 */
+        @keyframes neon-flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                opacity: 1;
+                filter: brightness(1.2); /* 光っている時は少し明るく */
+            }
+            20%, 22%, 24%, 55% {
+                opacity: 0.3; /* 一瞬だけ暗く（消えそうになる） */
+                filter: brightness(0.8);
+            }
+        }
+
+        /* ロゴにアニメーションを適用 */
+        #mission-img { 
+            width: 90%; 
+            margin-bottom: 30px;
+            /* 3秒周期で不規則にチカチカさせる */
+            animation: neon-flicker 3s infinite;
+        }
+
+
     </style>
 </head>
-<body onload="startAnimation()">
+<body onload="startAnimation()" ontouchstart="">
 
-    <div id="screen-top">
-        <div id="items" class="float-item"><img src="items.png" alt="items"></div>
-        <div id="iron" class="float-item"><img src="iron.png" alt="handagote"></div>
-        <div id="mission" class="float-item"><img src="missonhandagote.png" alt="mission"></div>
+    <audio id="myBgm" loop>
+        <source src="bgm.mp4" type="video/mp4">
+    </audio>
+
+    <div class="container">
+        <div id="items" class="float-item">
+            <img src="items.png">
+        </div>
         
-        <div id="btn-container" class="float-item">
+        <div id="iron" class="float-item">
+            <img src="iron.png">
+        </div>
+        
+        <div id="bottom-group" class="float-item">
+            <img src="missonhandagote.png" id="mission-img">
             <button id="start-btn" onclick="goToQuest()">
-                <img src="button-red.png" alt="START">
+                <img src="button-red.png">
             </button>
         </div>
     </div>
 
     <script>
-        // ページ読み込み時にパーツを順番に浮かび上がらせる
         function startAnimation() {
             setTimeout(() => {
                 document.querySelectorAll('.float-item').forEach(el => el.classList.add('appear'));
             }, 100);
         }
 
-        // ボタンを押したら謎解きページへ（URLを飛ばすか、画面を切り替える）
         function goToQuest() {
-            // ここに、次のクイズ画面への切り替え処理を書く
-            alert("いえーい！");
-            // window.location.href = "quest.html"; // 別ページにする場合
+            const bgm = document.getElementById('myBgm');
+            bgm.play().catch(() => {});
+            alert("ミッション開始！");
         }
     </script>
 </body>
