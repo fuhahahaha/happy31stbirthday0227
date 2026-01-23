@@ -133,3 +133,227 @@ img { width: 100%; height: auto; display: block; }
     transition: opacity 0.3s;
     pointer-events: none; 
 }
+
+/* --- Q1画面のレイアウト --- */
+
+/* Q1全体のコンテナ */
+.q1-container {
+    position: fixed;
+    top: 0; left: 0; 
+    width: 100vw; height: 100vh;
+    z-index: 9998;
+    display: none; 
+    opacity: 0;
+    pointer-events: none;
+    overflow-y: auto; /* コンテンツがはみ出たらスクロール */
+    background-color: #000; /* 画像の外側を黒で埋める */
+}
+
+/* 遷移後の表示状態 */
+.q1-container.active {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* 背景画像：高さを100%固定にして、左右は画面に合わせてカットする */
+.q1-bg {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;       /* 横幅は画面いっぱいに広がる許可を出す */
+    max-width: 402px;  /* でもiPhone 16 Proの幅以上には広げない */
+    height: 100vh;     /* 高さは常に画面いっぱい */
+    
+    /* 縦横比を維持したまま、画面を埋め尽くす（左右がカットされる） */
+    object-fit: cover; 
+    object-position: center;
+    z-index: 1;
+}
+
+/* 親要素（画面全体）の設定も再確認 */
+.q1-container {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: 9998;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    
+    /* スクロールを有効にする設定 */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* iPhoneで滑らかにスクロール */
+}
+
+/* コンテンツエリア：背景画像（402px）の幅に合わせる */
+#q1-content {
+    position: relative;
+    width: 100%;
+    max-width: 402px; /* これですべての要素が背景の幅に収まります */
+    margin: 0 auto;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.q1-title {
+    position: relative; /* absoluteから変更 */
+    margin-bottom: 20px;
+    font-size: 4rem;
+    font-family: serif;
+}
+
+/* 吹き出しのコンテナ：電話の右側に固定 */
+.hint-container {
+    position: fixed; /* 電話と一緒に画面に固定 */
+    top: 24%;        /* 電話の受話部分あたりの高さに調整（見た目で微調整してください） */
+    
+    /* 電話と同じ「背景の左端+20px」に、電話の横幅分（20vw）を足して右にずらす */
+    left: calc(50% - 201px + 20px + 20vw); 
+    
+    width: 60%;      /* 吹き出しのサイズ */
+    max-width: 250px; /* 大きくなりすぎないように制限 */
+    z-index: 11;     /* 電話(10)より手前か同じくらいに */
+    pointer-events: none;
+    opacity: 1; /* 最初から表示 */
+}
+
+.q1-hint {
+    width: 100%;
+    height: auto;
+    /* translateの計算が不要な画像本体にアニメーションをかける */
+    animation: hint-float-simple 3s infinite ease-in-out;
+}
+
+/* スマホサイズ（402px以下）の時の微調整 */
+@media (max-width: 402px) {
+    .hint-container {
+        left: calc(20px + 20vw); /* 画面左端20px + 電話の幅 */
+    }
+}
+
+@keyframes hint-float-simple {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* 受話器：背景画像の「左端」に常にくっつくようにする */
+.q1-phone {
+    position: fixed;
+    /* 位置計算は完璧です！ */
+    left: calc(50% - 201px + 20px); 
+    width: 20vw;
+    max-width: 400px; 
+    max-height: 400px;
+    object-fit: contain; 
+    z-index: 10;
+    pointer-events: none;
+
+    opacity: 1; 
+    
+    /* 修正ポイント：名前、時間、ループ、加速の順に並べる */
+    animation: phone-shake-real 3s infinite ease-in-out;
+}
+
+/* 画面が402pxより小さくなった時（背景が画面いっぱいになった時）のケア */
+@media (max-width: 402px) {
+    .q1-phone {
+        left: 20px; /* 単純に画面の左端から20pxにする */
+    }
+}
+
+.q1-dish {
+    position: relative;
+    width: 90%;
+    margin-top: 220px;
+    margin-left: auto; /* コンテナの右側に寄せる */
+    margin-right: 0;
+    display: block;
+}
+
+/* 入力欄を包むエリア：背景（402px）の中で中央寄せ */
+.input-area {
+    position: relative;
+    width: 90%;          /* 背景幅の90% */
+    margin-top: 40px;    /* お皿からの距離（見た目で微調整してください） */
+    margin-bottom: 50px; /* 下のボタンとの距離 */
+    display: flex;
+    justify-content: center;
+    z-index: 5;
+}
+
+/* 回答入力欄本体：白くて丸いデザイン */
+#ans1 {
+    width: 100%;
+    padding: 18px 25px;   /* 内側に余裕を持たせる */
+    border-radius: 50px;  /* 左右を完全に丸くする */
+    border: none;
+    background: white;
+    
+    /* デザイン画像のような、ふわっとした影をつける */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    
+    font-size: 1.2rem;
+    text-align: center;   /* 文字を中央から入力させる */
+    outline: none;        /* タップした時の青い枠を消す */
+    color: #333;          /* 入力文字の色 */
+}
+
+/* 「回答を入力」というプレースホルダーの色を薄くする */
+#ans1::placeholder {
+    color: #ccc;
+    font-weight: normal;
+}
+
+/* ボタンの配置 */
+.button-group {
+    position: relative;
+    width: 80%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.btn-return, .btn-go {
+    width: 85px;
+    height: 85px;
+    object-fit: contain;
+    cursor: pointer;
+}
+
+/* --- アニメーションの定義 --- */
+
+@keyframes phone-shake-real {
+    0%, 20% { transform: rotate(0); }
+    22%, 26%, 30% { transform: rotate(-5deg); }
+    24%, 28%, 32% { transform: rotate(5deg); }
+    34%, 100% { transform: rotate(0); }
+}
+
+/* 2. 吹き出しのふわふわ */
+/* 吹き出しは中央寄せ(translate -50%)を維持しながら上下に動かします */
+@keyframes hint-float {
+    0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+    50% { transform: translate(-50%, -50%) translateY(-10px); }
+}
+
+/* その他の要素も最初から見えるように */
+.q1-title, .q1-dish, .input-area, .button-group {
+    opacity: 1;
+}
+
+/* ボタン共通の押下設定 */
+.btn-return, .btn-go {
+    width: 85px;
+    height: 85px;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.1s, filter 0.1s; /* 滑らかに動かす */
+}
+
+/* 押した瞬間の演出 */
+.btn-return:active, .btn-go:active {
+    transform: scale(0.92);    /* 少し小さくなる */
+    filter: brightness(0.8);  /* 少し暗くなる */
+}

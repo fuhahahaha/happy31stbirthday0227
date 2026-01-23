@@ -26,7 +26,23 @@
         </div>
     </div>
 
-    <div id="quest-screen">TEST</div>
+    <div id="q1-screen" class="q1-container">
+        <img src="q1/bg.png" class="q1-bg">
+        <div id="q1-content">
+            <div class="hint-container">
+                <img src="q1/hint.png" class="q1-hint">
+            </div>
+            <img src="q1/phone.png" class="q1-phone">
+            <img src="q1/dish.png" class="q1-dish">
+            <div class="input-area">
+                <input type="text" id="ans1" placeholder="回答を入力" autocomplete="off">
+            </div>
+            <div class="button-group">
+                <img src="q1/return.png" class="btn-return" onclick="goBack()">
+                <img src="q1/go.png" class="btn-go" onclick="checkAnswer()">
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
