@@ -172,36 +172,37 @@ img { width: 100%; height: auto; display: block; }
     z-index: 1;
 }
 
-/* 親要素（画面全体）の設定も再確認 */
+/* Q1全体のコンテナ：スクロールを許可する */
 .q1-container {
     position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
+    top: 0; left: 0; 
+    width: 100vw; 
+    height: 100vh;
     z-index: 9998;
+    display: none; 
     opacity: 0;
-    transition: opacity 0.3s;
     pointer-events: none;
     
-    /* スクロールを有効にする設定 */
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch; /* iPhoneで滑らかにスクロール */
+    /* ここが重要！はみ出したらスクロールできるようにする */
+    overflow-y: scroll; 
+    -webkit-overflow-scrolling: touch; /* iPhoneで滑らかにする */
 }
 
 /* コンテンツエリア：背景画像（402px）の幅に合わせる */
+/* コンテンツエリア：高さを固定せず、中身に合わせて広がるように */
 #q1-content {
     position: relative;
     width: 100%;
     max-width: 402px;
-    height: 100vh;
+    /* height: 100vh; ← これを消して min-height に変える */
+    min-height: 100vh; 
     margin: 0 auto;
     z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    
-    /* 上に10vh、左右0、下に40pxの余白を設定 */
-    padding: 0 0 240px; 
-    
+    justify-content: flex-start; /* space-betweenから変更して、マージンで調整 */
+    padding: 0 0 60px; /* 下の余白を少し多めの60pxに */
     box-sizing: border-box;
 }
 
@@ -215,7 +216,7 @@ img { width: 100%; height: auto; display: block; }
 /* 吹き出しのコンテナ：電話の右側に固定 */
 .hint-container {
     position: fixed; /* 電話と一緒に画面に固定 */
-    top: 24%;        /* 電話の受話部分あたりの高さに調整（見た目で微調整してください） */
+    top: 20%;        /* 電話の受話部分あたりの高さに調整（見た目で微調整してください） */
     
     /* 電話と同じ「背景の左端+20px」に、電話の横幅分（20vw）を足して右にずらす */
     left: calc(50% - 201px + 20px + 20vw); 
@@ -271,13 +272,13 @@ img { width: 100%; height: auto; display: block; }
     }
 }
 
+/* お皿の上の余白を少し削って、全体を上に持ち上げる */
 .q1-dish {
     position: relative;
-    width: 90%;
-    margin-top: 220px;
-    margin-left: auto; /* コンテナの右側に寄せる */
+    width: 80%;
+    margin-top: 20vh; /* 200px固定ではなくvhで調整 */
+    margin-left: auto;
     margin-right: 0;
-    display: block;
 }
 
 /* 入力欄を包むエリア：背景（402px）の中で中央寄せ */
