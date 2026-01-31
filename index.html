@@ -2,160 +2,169 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test: Shake & Flash Effect</title>
-    <style>
-        body { 
-            background-color: #1a1a1a; 
-            color: white; 
-            font-family: 'Helvetica Neue', Arial, sans-serif; 
-            text-align: center; 
-            margin: 0; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            height: 100vh; 
-            overflow: hidden; 
-            transition: background-color 0.1s;
-        }
-
-        .container { 
-            width: 85%; 
-            max-width: 400px; 
-            border: 3px solid #ff0000; 
-            padding: 40px 20px; 
-            background: #2b2b2b; 
-            box-shadow: 0 0 25px rgba(255,0,0,0.4); 
-            border-radius: 20px;
-            position: relative;
-        }
-
-        /* ★ガタガタ揺れるアニメーション★ */
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
-        }
-
-        /* ★暗転（点滅）アニメーション★ */
-        @keyframes flash {
-            0%, 20%, 40%, 60%, 80%, 100% { background-color: #000; }
-            10%, 30%, 50%, 70%, 90% { background-color: #1a1a1a; }
-        }
-
-        /* エフェクト実行用のクラス */
-        .effect-shake { animation: shake 0.2s infinite; }
-        .effect-flash { animation: flash 1s step-end 1; }
-
-        h1 { color: #ff0000; font-size: 1.6rem; letter-spacing: 2px; }
-        .hidden { display: none; }
-
-        button { 
-            background: #ff0000; 
-            color: white; 
-            border: none; 
-            padding: 15px 40px; 
-            font-size: 1.1rem; 
-            cursor: pointer; 
-            margin-top: 25px; 
-            font-weight: bold;
-            border-radius: 50px; 
-            transition: all 0.1s; 
-            box-shadow: 0 6px 0 #b30000;
-        }
-
-        button:active {
-            transform: translateY(4px);
-            box-shadow: 0 2px 0 #b30000;
-        }
-
-        input { 
-            padding: 12px; 
-            width: 80%; 
-            font-size: 1.1rem; 
-            margin-top: 15px; 
-            background: #f0f0f0; 
-            color: #333; 
-            border: none; 
-            border-radius: 8px;
-            text-align: center; 
-        }
-
-        #animation-overlay { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            display: none; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 3.5rem; 
-            font-weight: bold; 
-            z-index: 10; 
-        }
-        .correct { color: #00ff00; text-shadow: 0 0 20px #00ff00; }
-        .wrong { color: #ff0000; text-shadow: 0 0 20px #ff0000; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Yuji's Birthday Quest</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style_adv.css">
+    <link rel="stylesheet" href="style_q3.css">
+    <link rel="stylesheet" href="style_q4.css">
+    <link rel="stylesheet" href="style_q5.css">
 </head>
-<body id="body-bg">
+<body onload="startAnimation()" ontouchstart="">
 
-<div id="animation-overlay"></div>
+    <audio id="myBgm" loop>
+        <source src="bgm.mp4" type="video/mp4">
+    </audio>
 
-<div class="container" id="main-container">
-    <div id="screen-q1">
-        <p>Q1. 二人の記念日は？</p>
-        <input type="text" id="ans1" placeholder="0000" inputmode="numeric">
-        <br><button onclick="checkAnswer(1, '0825', 'screen-goal')">ANSWER</button>
+    <div id="transition-layer"></div>
+
+    <div id="screen-top" class="container">
+        <div id="items" class="float-item"><img src="items.png"></div>
+        <div id="iron" class="float-item"><img src="iron.png"></div>
+        
+        <div id="bottom-group" class="float-item">
+            <img src="missonhandagote.png" id="mission-img">
+            <button id="start-btn" onclick="goToQuest()">
+                <img src="button-red.png">
+            </button>
+        </div>
     </div>
 
-    <div id="screen-goal" class="hidden">
-        <h1 style="color: #00ff00;">CLEAR!!</h1>
-        <p>正解！次のヒントへ進んでね。</p>
+    <div id="q1-screen" class="q1-container">
+        <img src="q1/bg.png" class="q1-bg">
+        <div id="q1-content">
+            <div class="hint-container">
+                <img src="q1/hint.png" class="q1-hint">
+            </div>
+            <img src="q1/phone.png" class="q1-phone">
+            <img src="q1/dish.png" class="q1-dish">
+            <div class="input-area">
+                <input type="text" id="ans1" placeholder="回答を入力" autocomplete="off">
+            </div>
+            <div class="button-group">
+                <img src="q1/return.png" class="btn-return" onclick="goBack()">
+                <img src="q1/go.png" class="btn-go" onclick="checkAnswer()">
+            </div>
+        </div>
+    </div>
+
+    <div id="q2-screen" class="q2-container">
+        <img src="q1/bg-fuji.png" class="q1-bg" style="filter: brightness(0.4) blur(8px);">
+        
+        <div id="q2-content">
+            <div class="character-wrap">
+                <img id="q2-char-img" src="q2/face_normal.png" alt="ホテルの人">
+            </div>
+    
+            <div class="q2-call-info">
+                <p class="q2-caller">The Sense Fuji - Front</p>
+                <p id="q2-timer">00:00</p>
+            </div>
+    
+            <div class="q2-msg-window" onclick="handleWindowClick()">
+                <div id="q2-text-box"></div>
+                <div id="q2-next-icon" class="hidden">▼</div>
+            </div>
+    
+            <div id="q2-choice-layer" class="q2-choice-container hidden"></div>
+        </div>
+    </div> <div id="q3-screen" class="screen hidden">
+        <div class="q3-login-container">
+            <h2>STAFF ONLY</h2>
+            <p class="q3-instruction">従業員専用VPN接続：<br>Wi-Fiパスワードを入力してください</p>
+            
+            <div class="q3-input-group">
+                <label class="q3-label">USER ID</label>
+                <input type="text" id="q3-id-input" value="staff-tokaiteio" readonly>
+                
+                <label class="q3-label">PASSWORD</label>
+                <input type="password" id="q3-pass-input" placeholder="Password" autocomplete="off">
+                
+                <button id="q3-login-btn" onclick="checkQ3Password()">CONNECT</button>
+            </div>
+            
+            <p id="q3-error" class="hidden">認証エラー：パスワードが正しくありません</p>
+        </div>
+    </div>
+
+    <div id="q4-screen" class="screen hidden">
+        <div class="q4-container">
+            <header class="q4-header">
+                <h3>Internal Mail System</h3>
+                <span class="q4-user-id">ID: staff-tokaiteio</span>
+            </header>
+    
+            <div id="q4-mail-list" class="q4-list"></div>
+    
+            <div id="q4-mail-detail" class="q4-detail hidden">
+                <button class="back-btn" onclick="hideMailDetail()">＜ 戻る</button>
+                <div class="detail-header">
+                    <h4 id="detail-subject"></h4>
+                    <p id="detail-info"></p>
+                </div>
+                <div id="detail-body" class="detail-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="q5-screen" class="screen hidden">
+        <div class="q5-header-area">
+            <img src="q5/headerimage.png" class="q5-header-bg">
+            <img src="q5/gametitle.png" class="q5-title-img">
+        </div>
+    
+        <div class="q5-game-container">
+            <div id="q5-game-canvas">
+                <img src="q5/thread.png" id="q5-thread" class="game-asset">
+                <img src="q5/needle.png" id="q5-needle" class="game-asset">
+                
+                <img src="q5/success.png" id="q5-success-img" class="result-img hidden">
+                <img src="q5/miss.png" id="q5-miss-img" class="result-img hidden">
+            </div>
+    
+            <div class="q5-controls">
+                <button id="q5-shoot-btn" onclick="shootThread()">今だ！</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="q6-screen" class="screen hidden">
+        <div class="q6-festival-container">
+            <header class="q6-header">
+                <img src="q6/logo.png" style="width:200px"> <div class="q6-logo-text">ONRF XV</div>
+                <p>OGA NAMAHAGE ROCK FESTIVAL VOL.15</p>
+            </header>
+    
+            <div class="q6-main-visual">
+                <div class="q6-date-row">
+                    <span class="q6-year">2026</span>
+                    <span class="q6-m">7.</span><span class="q6-d">24</span>
+                    <span class="q6-sep">/</span><span class="q6-d blue">25</span>
+                    <span class="q6-sep">/</span><span class="q6-d red">26</span>
+                </div>
+                <p>秋田県男鹿市船川港内特設ステージ</p>
+            </div>
+    
+            <div class="q6-red-banner">
+                <h2>ONRF Vol.15<br>3Days開催決定!!</h2>
+                <p>詳細はこれより随時お知らせ！<br>今年も男鹿で皆様をお待ちしております!!</p>
+            </div>
+    
+            <div class="q6-video-section">
+                <iframe width="100%" height="200" src="https://www.youtube.com/embed/あなたの動画ID" frameborder="0" allowfullscreen></iframe>
+            </div>
+            
+            <div style="padding: 20px; text-align: center; color: white;">
+                <p>ゆうじくん、誕生日おめでとう！</p>
+            </div>
+        </div>
     </div>
 </div>
 
-<script>
-    function checkAnswer(qNum, correctAns, nextId) {
-        const userAns = document.getElementById('ans' + qNum).value;
-        const overlay = document.getElementById('animation-overlay');
-        const container = document.getElementById('main-container');
-        const bodyBg = document.getElementById('body-bg');
-        
-        if (userAns === correctAns) {
-            overlay.innerHTML = "<span class='correct'>正解！</span>";
-            overlay.style.backgroundColor = "rgba(0,0,0,0.85)";
-            overlay.style.display = "flex";
-            setTimeout(() => {
-                overlay.style.display = "none";
-                document.getElementById('screen-q1').classList.add('hidden');
-                document.getElementById(nextId).classList.remove('hidden');
-            }, 1200);
-        } else {
-            // ★不正解時のエフェクト開始★
-            overlay.innerHTML = "<span class='wrong'>ERROR</span>";
-            overlay.style.backgroundColor = "transparent"; // 背景が見えるように
-            overlay.style.display = "flex";
-            
-            container.classList.add('effect-shake'); // 揺らす
-            bodyBg.classList.add('effect-flash'); // 暗転させる
+    <script src="script.js"></script>
+    <script src="script_q4.js"></script>
+    <script src="script_adv.js"></script>
+    <script src="script_q5.js"></script>
 
-            setTimeout(() => {
-                // 1秒後にエフェクトを解除
-                overlay.style.display = "none";
-                container.classList.remove('effect-shake');
-                bodyBg.classList.remove('effect-flash');
-            }, 1000);
-        }
-    }
-</script>
 </body>
 </html>

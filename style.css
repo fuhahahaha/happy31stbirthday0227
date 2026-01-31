@@ -1,0 +1,377 @@
+/* --- 全体レイアウト --- */
+body {
+    margin: 0; padding: 0;
+    background: url('bg.png') repeat;
+    background-size: 300px;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.container {
+    position: relative;
+    width: 100vw;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 30px;
+}
+
+/* --- アニメーションパーツ --- */
+.float-item {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.appear {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+#items {
+    width: 100%;
+    z-index: 1;
+    transition-delay: 0.2s;
+}
+#items img {
+    animation: yura-yura 3s infinite ease-in-out;
+    transform-origin: center center;
+}
+
+#iron {
+    width: 80%;
+    z-index: 2;
+    margin-top: -120px; 
+    margin-left: auto;
+    margin-right: 0%;
+    transition-delay: 0.5s;
+}
+#iron img {
+    animation: gatagata 2.5s infinite ease-in-out;
+}
+
+#bottom-group {
+    width: 80%;
+    z-index: 3;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition-delay: 0.8s;
+}
+
+#mission-img { 
+    width: 90%; 
+    margin-bottom: 30px !important; 
+    animation: neon-flicker 3s infinite;
+}
+
+#start-btn {
+    width: 80%; background: none; border: none; padding: 0;
+    cursor: pointer; outline: none; transition: transform 0.1s;
+    position: relative; z-index: 10;
+}
+#start-btn:active { transform: scale(0.92); filter: brightness(0.8); }
+
+img { width: 100%; height: auto; display: block; }
+
+/* --- 演出用アニメーション --- */
+@keyframes yura-yura {
+    0%, 100% { transform: rotate(-1.5deg); }
+    50% { transform: rotate(1.5deg); }
+}
+
+@keyframes gatagata {
+    0%, 40% { transform: rotate(0deg); }
+    5%, 15%, 25%, 35% { transform: rotate(2deg) translate(2px, -1px); }
+    10%, 20%, 30% { transform: rotate(-2deg) translate(-1px, 2px); }
+    40%, 100% { transform: rotate(0deg); }
+}
+
+@keyframes neon-flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; filter: brightness(1.2); }
+    20%, 22%, 24%, 55% { opacity: 0.3; filter: brightness(0.8); }
+}
+
+/* --- 画面遷移演出 --- */
+#transition-layer {
+    position: fixed;
+    top: 0; 
+    left: 0; 
+    width: 100vw; 
+    height: 100vh;
+    background-color: black;
+    z-index: 9999;
+    pointer-events: none; 
+    clip-path: circle(0% at 50% 50%);
+    transition: clip-path 0.8s ease-in-out;
+}
+
+#transition-layer.active {
+    clip-path: circle(150% at 50% 50%);
+}
+
+#quest-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 3rem;
+    font-weight: bold;
+    z-index: 9998;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none; 
+}
+
+/* --- Q1画面のレイアウト --- */
+
+/* Q1全体のコンテナ */
+.q1-container {
+    position: fixed;
+    top: 0; left: 0; 
+    width: 100vw; height: 100vh;
+    z-index: 9998;
+    display: none; 
+    opacity: 0;
+    pointer-events: none;
+    overflow-y: auto; /* コンテンツがはみ出たらスクロール */
+    background-color: #000; /* 画像の外側を黒で埋める */
+}
+
+/* 遷移後の表示状態 */
+.q1-container.active {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* 背景画像：高さを100%固定にして、左右は画面に合わせてカットする */
+.q1-bg {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;       /* 横幅は画面いっぱいに広がる許可を出す */
+    max-width: 402px;  /* でもiPhone 16 Proの幅以上には広げない */
+    height: 100vh;     /* 高さは常に画面いっぱい */
+    
+    /* 縦横比を維持したまま、画面を埋め尽くす（左右がカットされる） */
+    object-fit: cover; 
+    object-position: center;
+    z-index: 1;
+}
+
+/* Q1全体のコンテナ：スクロールを許可する */
+.q1-container {
+    position: fixed;
+    top: 0; left: 0; 
+    width: 100vw; 
+    height: 100vh;
+    z-index: 9998;
+    display: none; 
+    opacity: 0;
+    pointer-events: none;
+    
+    /* ここが重要！はみ出したらスクロールできるようにする */
+    overflow-y: scroll; 
+    -webkit-overflow-scrolling: touch; /* iPhoneで滑らかにする */
+}
+
+/* コンテンツエリア：背景画像（402px）の幅に合わせる */
+/* コンテンツエリア：高さを固定せず、中身に合わせて広がるように */
+#q1-content {
+    position: relative;
+    width: 100%;
+    max-width: 402px;
+    /* height: 100vh; ← これを消して min-height に変える */
+    min-height: 100vh; 
+    margin: 0 auto;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* space-betweenから変更して、マージンで調整 */
+    padding: 0 0 60px; /* 下の余白を少し多めの60pxに */
+    box-sizing: border-box;
+}
+
+.q1-title {
+    position: relative; /* absoluteから変更 */
+    margin-bottom: 20px;
+    font-size: 4rem;
+    font-family: serif;
+}
+
+/* 吹き出しのコンテナ：電話の右側に固定 */
+.hint-container {
+    position: fixed; /* 電話と一緒に画面に固定 */
+    top: 20%;        /* 電話の受話部分あたりの高さに調整（見た目で微調整してください） */
+    
+    /* 電話と同じ「背景の左端+20px」に、電話の横幅分（20vw）を足して右にずらす */
+    left: calc(50% - 201px + 20px + 20vw); 
+    
+    width: 60%;      /* 吹き出しのサイズ */
+    max-width: 250px; /* 大きくなりすぎないように制限 */
+    z-index: 11;     /* 電話(10)より手前か同じくらいに */
+    pointer-events: none;
+    opacity: 1; /* 最初から表示 */
+}
+
+.q1-hint {
+    width: 100%;
+    height: auto;
+    /* translateの計算が不要な画像本体にアニメーションをかける */
+    animation: hint-float-simple 3s infinite ease-in-out;
+}
+
+/* スマホサイズ（402px以下）の時の微調整 */
+@media (max-width: 402px) {
+    .hint-container {
+        left: calc(20px + 20vw); /* 画面左端20px + 電話の幅 */
+    }
+}
+
+@keyframes hint-float-simple {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* 受話器：背景画像の「左端」に常にくっつくようにする */
+.q1-phone {
+    position: fixed;
+    /* 位置計算は完璧です！ */
+    left: calc(50% - 201px + 20px); 
+    width: 20vw;
+    max-width: 400px; 
+    max-height: 400px;
+    object-fit: contain; 
+    z-index: 10;
+    pointer-events: none;
+
+    opacity: 1; 
+    
+    /* 修正ポイント：名前、時間、ループ、加速の順に並べる */
+    animation: phone-shake-real 3s infinite ease-in-out;
+}
+
+/* 画面が402pxより小さくなった時（背景が画面いっぱいになった時）のケア */
+@media (max-width: 402px) {
+    .q1-phone {
+        left: 20px; /* 単純に画面の左端から20pxにする */
+    }
+}
+
+/* お皿の上の余白を少し削って、全体を上に持ち上げる */
+.q1-dish {
+    position: relative;
+    width: 80%;
+    margin-top: 20vh; /* 200px固定ではなくvhで調整 */
+    margin-left: auto;
+    margin-right: 0;
+}
+
+/* 入力欄を包むエリア：背景（402px）の中で中央寄せ */
+.input-area {
+    position: relative;
+    width: 90%;          /* 背景幅の90% */
+    margin-top: 10px;    /* お皿からの距離（見た目で微調整してください） */
+    margin-bottom: 10px; /* 下のボタンとの距離 */
+    display: flex;
+    justify-content: center;
+    z-index: 5;
+}
+
+/* 回答入力欄本体：グラスモーフィズムデザイン */
+#ans1 {
+    width: 100%;
+    padding: 18px 25px;
+    border-radius: 50px;
+    
+    /* 背景を半透明の白にする */
+    background: rgba(255, 255, 255, 0.1); 
+    
+    /* 背景をぼかす（これがグラスモーフィズムの肝！） */
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px); /* Safari用 */
+    
+    /* ガラスの質感を出すための細い境界線 */
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    
+    /* 影も少し控えめにすると透明感が際立ちます */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    
+    font-size: 1.2rem;
+    text-align: center;
+    outline: none;
+    color: white; /* 背景が透けるので文字は白の方が見えやすいかも */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); /* 文字の視認性アップ */
+}
+
+/* プレースホルダーの色も白っぽく調整 */
+#ans1::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: normal;
+}
+
+/* ボタンエリアの微調整 */
+.button-group {
+    position: relative;
+    width: 80%;
+    display: flex;
+    justify-content: space-around;
+    /* padding-bottom: 2vh; は削除してOKです */
+}
+
+.btn-return, .btn-go {
+    width: 85px;
+    height: 85px;
+    object-fit: contain;
+    cursor: pointer;
+}
+
+/* --- アニメーションの定義 --- */
+
+@keyframes phone-shake-real {
+    0%, 20% { transform: rotate(0); }
+    22%, 26%, 30% { transform: rotate(-5deg); }
+    24%, 28%, 32% { transform: rotate(5deg); }
+    34%, 100% { transform: rotate(0); }
+}
+
+/* 2. 吹き出しのふわふわ */
+/* 吹き出しは中央寄せ(translate -50%)を維持しながら上下に動かします */
+@keyframes hint-float {
+    0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+    50% { transform: translate(-50%, -50%) translateY(-10px); }
+}
+
+/* その他の要素も最初から見えるように */
+.q1-title, .q1-dish, .input-area, .button-group {
+    opacity: 1;
+}
+
+/* ボタン共通の押下設定 */
+.btn-return, .btn-go {
+    width: 85px;
+    height: 85px;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.1s, filter 0.1s; /* 滑らかに動かす */
+}
+
+/* 押した瞬間の演出 */
+.btn-return:active, .btn-go:active {
+    transform: scale(0.92);    /* 少し小さくなる */
+    filter: brightness(0.8);  /* 少し暗くなる */
+}

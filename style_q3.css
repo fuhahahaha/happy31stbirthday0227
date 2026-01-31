@@ -1,0 +1,114 @@
+/* --- style_q3.css --- */
+
+#q3-screen {
+    background: url('q3/q3background.jpg') repeat top center;
+    background-size: 100vw auto; 
+    background-color: #0d1117;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    padding-top: 50px;
+    min-height: 100vh;
+    width: 100%;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.q3-login-container {
+    width: 85%;
+    max-width: 380px;
+    padding: 30px;
+    background: rgba(22, 27, 34, 0.9);
+    backdrop-filter: blur(5px);
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 20px;
+    box-sizing: border-box; /* パディングを含めた幅計算にする */
+}
+
+/* 1. STAFF ONLY を白に */
+.q3-login-container h2 {
+    color: #ffffff; 
+    font-size: 24px;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+/* 2. その下の文字（説明文）を白に */
+.q3-instruction {
+    color: #ffffff;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.q3-input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 中の要素を中央寄せ */
+    gap: 10px;
+    width: 100%;
+}
+
+.q3-label {
+    display: block;
+    width: 100%; /* ラベルの幅を揃える */
+    text-align: left;
+    color: #8b949e;
+    font-size: 10px;
+    margin-bottom: 2px;
+}
+
+/* 3. USER ID と PASSWORD の幅を同じにする */
+#q3-id-input, #q3-pass-input {
+    width: 100%; /* コンテナいっぱいに広げて揃える */
+    max-width: 300px; /* 必要に応じて調整してね */
+    padding: 12px;
+    background: #0d1117;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+    text-align: center;
+    outline: none;
+}
+
+#q3-id-input {
+    border: 1px solid #30363d;
+    color: #8b949e;
+    cursor: not-allowed;
+    margin-bottom: 10px;
+}
+
+#q3-pass-input {
+    border: 2px solid #58a6ff;
+    color: #ffffff;
+    margin-bottom: 25px;
+}
+
+/* 4. CONNECTボタンをvw40%で、その下に配置 */
+#q3-login-btn {
+    width: 40vw; /* 画面幅の40% */
+    max-width: 200px; /* 大きくなりすぎないようにストッパー */
+    padding: 20px;
+    background-color: #238636;
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    margin-top: 5px; /* 入力欄との間隔 */
+    margin-bottom: 20px;
+}
+
+#q3-login-btn:active {
+    background-color: #2ea043;
+    transform: scale(0.95);
+}
+
+#q3-error {
+    color: #f85149;
+    margin-top: 20px;
+    font-size: 12px;
+}
