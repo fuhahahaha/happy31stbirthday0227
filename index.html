@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Yuji's Birthday Quest</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style_adv.css">
+    <link rel="stylesheet" href="style_q3.css">
+    <link rel="stylesheet" href="style_q4.css">
+    <link rel="stylesheet" href="style_q5.css">
 </head>
 <body onload="startAnimation()" ontouchstart="">
 
@@ -44,6 +48,123 @@
         </div>
     </div>
 
+    <div id="q2-screen" class="q2-container">
+        <img src="q1/bg-fuji.png" class="q1-bg" style="filter: brightness(0.4) blur(8px);">
+        
+        <div id="q2-content">
+            <div class="character-wrap">
+                <img id="q2-char-img" src="q2/face_normal.png" alt="ホテルの人">
+            </div>
+    
+            <div class="q2-call-info">
+                <p class="q2-caller">The Sense Fuji - Front</p>
+                <p id="q2-timer">00:00</p>
+            </div>
+    
+            <div class="q2-msg-window" onclick="handleWindowClick()">
+                <div id="q2-text-box"></div>
+                <div id="q2-next-icon" class="hidden">▼</div>
+            </div>
+    
+            <div id="q2-choice-layer" class="q2-choice-container hidden"></div>
+        </div>
+    </div> <div id="q3-screen" class="screen hidden">
+        <div class="q3-login-container">
+            <h2>STAFF ONLY</h2>
+            <p class="q3-instruction">従業員専用VPN接続：<br>Wi-Fiパスワードを入力してください</p>
+            
+            <div class="q3-input-group">
+                <label class="q3-label">USER ID</label>
+                <input type="text" id="q3-id-input" value="staff-tokaiteio" readonly>
+                
+                <label class="q3-label">PASSWORD</label>
+                <input type="password" id="q3-pass-input" placeholder="Password" autocomplete="off">
+                
+                <button id="q3-login-btn" onclick="checkQ3Password()">CONNECT</button>
+            </div>
+            
+            <p id="q3-error" class="hidden">認証エラー：パスワードが正しくありません</p>
+        </div>
+    </div>
+
+    <div id="q4-screen" class="screen hidden">
+        <div class="q4-container">
+            <header class="q4-header">
+                <h3>Internal Mail System</h3>
+                <span class="q4-user-id">ID: staff-tokaiteio</span>
+            </header>
+    
+            <div id="q4-mail-list" class="q4-list"></div>
+    
+            <div id="q4-mail-detail" class="q4-detail hidden">
+                <button class="back-btn" onclick="hideMailDetail()">＜ 戻る</button>
+                <div class="detail-header">
+                    <h4 id="detail-subject"></h4>
+                    <p id="detail-info"></p>
+                </div>
+                <div id="detail-body" class="detail-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="q5-screen" class="screen hidden">
+        <div class="q5-header-area">
+            <img src="q5/headerimage.png" class="q5-header-bg">
+            <img src="q5/gametitle.png" class="q5-title-img">
+        </div>
+    
+        <div class="q5-game-container">
+            <div id="q5-game-canvas">
+                <img src="q5/thread.png" id="q5-thread" class="game-asset">
+                <img src="q5/needle.png" id="q5-needle" class="game-asset">
+                
+                <img src="q5/success.png" id="q5-success-img" class="result-img hidden">
+                <img src="q5/miss.png" id="q5-miss-img" class="result-img hidden">
+            </div>
+    
+            <div class="q5-controls">
+                <button id="q5-shoot-btn" onclick="shootThread()">今だ！</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="q6-screen" class="screen hidden">
+        <div class="q6-festival-container">
+            <header class="q6-header">
+                <img src="q6/logo.png" style="width:200px"> <div class="q6-logo-text">ONRF XV</div>
+                <p>OGA NAMAHAGE ROCK FESTIVAL VOL.15</p>
+            </header>
+    
+            <div class="q6-main-visual">
+                <div class="q6-date-row">
+                    <span class="q6-year">2026</span>
+                    <span class="q6-m">7.</span><span class="q6-d">24</span>
+                    <span class="q6-sep">/</span><span class="q6-d blue">25</span>
+                    <span class="q6-sep">/</span><span class="q6-d red">26</span>
+                </div>
+                <p>秋田県男鹿市船川港内特設ステージ</p>
+            </div>
+    
+            <div class="q6-red-banner">
+                <h2>ONRF Vol.15<br>3Days開催決定!!</h2>
+                <p>詳細はこれより随時お知らせ！<br>今年も男鹿で皆様をお待ちしております!!</p>
+            </div>
+    
+            <div class="q6-video-section">
+                <iframe width="100%" height="200" src="https://www.youtube.com/embed/あなたの動画ID" frameborder="0" allowfullscreen></iframe>
+            </div>
+            
+            <div style="padding: 20px; text-align: center; color: white;">
+                <p>ゆうじくん、誕生日おめでとう！</p>
+            </div>
+        </div>
+    </div>
+</div>
+
     <script src="script.js"></script>
+    <script src="script_q4.js"></script>
+    <script src="script_adv.js"></script>
+    <script src="script_q5.js"></script>
+
 </body>
 </html>
