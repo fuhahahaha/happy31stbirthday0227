@@ -82,20 +82,14 @@
     border-bottom: 2px solid #004080;
     margin-bottom: 20px;
     padding-bottom: 10px;
-}
-
-.detail-body {
-    font-size: 14px;
-    line-height: 1.8;
-    white-space: pre-wrap;
-}
+}åå
 
 /* 4つ目のメール内の特別リンク */
 .special-link {
     display: inline-block;
     margin-top: 20px;
     padding: 10px 20px;
-    background: #ff69b4;
+    background: #6a5acd;
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -116,7 +110,6 @@
 /* style_q4.css 追加分 */
 .final-link {
     display: block;
-    margin-top: 30px;
     padding: 20px;
     background: linear-gradient(45deg, #ff0000, #ff8c00); /* 燃えるフェスカラー */
     color: white !important;
@@ -126,11 +119,52 @@
     font-size: 18px;
     font-weight: bold;
     box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
-    animation: pulse 2s infinite; /* 拍動するようなアニメーション */
 }
 
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+.important-text {
+    color: #ff0000 !important; /* 真っ赤！ */
+    font-weight: bold;         /* ついでに太字にして強調 */
+}
+
+/* style_q4.css 追加分 */
+
+#detail-body {
+    display: block !important;    /* flexを解除して元に戻す */
+    text-align: left !important;  /* 基本は左寄せ */
+    align-items: flex-start !important;
+}
+
+/* 告知用の赤いテキストボックス */
+.fess-announce-box {
+    background-color: rgb(217, 207, 197);  /* ユーザー指定のオレンジ赤 */
+    width: 95%;
+    align-items: center;
+}
+
+/* メインの告知テキスト */
+.fess-main-text {
+    display: block !important;
+    font-size: 1.3rem;
+    font-weight: 900;          
+    color: #000000;             /* 背景が赤なので白文字が一番映えるよ！ */
+    margin: 0 0 30px 0;         /* 下に余白 */
+    text-align: center !important; /* 強制中央 */
+    line-height: 1.1;
+}
+
+.fess-sub-text {
+    display: block !important;
+    font-size: 0.95rem;
+    color: #000000;
+    font-weight: bold;
+    text-align: center !important;
+}
+
+
+.fess-icon{
+    width: 150px;
+    height: auto;
+    display:  block;
+    margin-left: auto;
+    margin-right: auto;
 }
