@@ -1,3 +1,13 @@
+// 本番 / デバッグ振り分け（URLに ?debug があればデバッグモード）
+function init() {
+    const isDebug = new URLSearchParams(window.location.search).has('debug');
+    if (isDebug) {
+        debugManager();
+    } else {
+        startLoading();
+    }
+}
+
 // 1. ページが読み込まれたらまずこれを実行
 function startLoading() {
     const loader = document.getElementById('loading-screen');
@@ -41,7 +51,14 @@ function startAnimation() {
     // BGM: birthdayreggae（TOP画面から Q2開始まで）
     window.birthdayBgm = new Audio('bgm/birthdayreggae.mp3');
     window.birthdayBgm.loop = true;
-    window.birthdayBgm.play().catch(() => {});
+    window.birthdayBgm.play().catch(() => {
+        // モバイルのAutoplay制限対策：初回タッチで再生
+        const resume = () => {
+            window.birthdayBgm.play().catch(() => {});
+        };
+        document.addEventListener('touchstart', resume, { once: true });
+        document.addEventListener('click', resume, { once: true });
+    });
 }
 
 // 【修正版】トップからQ1へ

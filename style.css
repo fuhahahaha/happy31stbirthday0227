@@ -154,6 +154,17 @@ img { width: 100%; height: auto; display: block; }
     clip-path: circle(150% at 50% 50%);
 }
 
+/* 各クエスト画面の共通スタイル：body ではなく画面内でスクロールする */
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
 #quest-screen {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
