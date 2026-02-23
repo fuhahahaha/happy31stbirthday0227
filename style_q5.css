@@ -1,0 +1,221 @@
+/* --- style_q5.css --- */
+
+#q5-intro-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000; /* screen(9999) よりもさらに手前に！ */
+    color: white;
+}
+
+#q5-message-area {
+    color: #fff;
+    /* フォントサイズを大きく！お好みで調整してね💅 */
+    font-size: 14px; 
+    /* 太字にしてインパクトを出す */
+    font-weight: 400;
+    /* 読みやすいフォント（sans-serif系） */
+    font-family: "Helvetica Neue";
+    text-align: center;
+    line-height: 1.5;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    
+    /* ★ここ重要！文字に黒い影をつけて、背景がどんな色でも読みやすくする */
+    text-shadow: 0 0 15px rgba(0, 0, 0, 0.8), 2px 2px 4px rgba(0, 0, 0, 1);
+    
+    /* 画面の真ん中に固定するための微調整 */
+    width: 90%;
+    max-width: 500px;
+}
+
+/* 幕開けエフェクト（Q5本体） */
+#q5-game-main {
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+.curtain-open {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+}
+
+.q5-appear {
+    opacity: 1 !important;
+    transition: opacity 1.5s ease;
+}
+
+#q5-screen {
+    position: fixed; /* absolute から fixed に変えて画面に固定💅 */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999; /* TOPやQ1と同じ、あるいはそれ以上の強さにする */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #000; /* 背景を黒にしておく */
+    overflow: hidden;
+}
+
+/* ヘッダーエリアの重なり設定 */
+.q5-header-area {
+    position: relative;
+    width: 100vw;
+}
+
+.q5-header-bg {
+    width: 100vw;
+    display: block;
+}
+
+.q5-title-img {
+    position: absolute;
+    top: 0;
+    left: 0;           /* 中央寄せから左寄せに変更 */
+    transform: none;    /* 中央寄せ用の移動を解除 */
+    margin-top: 60px;   /* 30pxから60pxに変更 */
+    width: 240px;       /* 240pxに指定 */
+    z-index: 20;
+}
+
+/* ゲームコンテナ */
+.q5-game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* ヘッダーのすぐ下に配置されるようマージンなし */
+}
+
+#q5-game-canvas {
+    width: 380px;
+    height: 380px;
+    background: url('q5/q5background.png') no-repeat center;
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #fff;
+    margin-top: 0; /* ヘッダーのすぐ下 */
+}
+
+/* ボタン設定 */
+.q5-controls {
+    margin-top: 30px;
+    position: relative;
+    z-index: 1100; /* 1000から1100へ（確実に影より上！）💅 */
+}
+
+#q5-shoot-btn {
+    padding: 15px 40px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #ff4500;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 5px #b23000;
+}
+
+/* 糸と針の基本位置 */
+.game-asset {
+    position: absolute;
+}
+
+#q5-thread {
+    position: absolute;
+    left: -330px;
+    top: 50%;
+    width: 381px;
+    height: 212px;
+    z-index: 10;
+}
+
+#q5-needle {
+    position: absolute;
+    right: 20px;
+    top: 0;
+    width: 50px;
+    height: 380px;
+    z-index: 11; /* 糸より少し上 */
+}
+
+/* 背景を暗くするためのレイヤー */
+#q5-game-canvas::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 15; /* 糸(10)や針(11)より上 */
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+}
+
+#q5-screen::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 100; /* 500から100に下げる💅 */
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+}
+
+/* 判定中・結果表示中に暗くするクラス */
+#q5-screen.darken::after,
+#q5-screen.darken #q5-game-canvas::after {
+    opacity: 1;
+}
+
+/* 判定中はキャンバス全体を上のレイヤーに持ってくる（これがないと画像が影に隠れる） */
+#q5-screen.darken #q5-game-canvas {
+    z-index: 600; 
+}
+
+/* 成功時の青ボタン */
+#q5-shoot-btn.next {
+    background-color: #007bff !important; /* 強制的に青にする */
+    box-shadow: 0 5px #0056b3 !important;
+}
+
+/* 失敗時の赤ボタン */
+#q5-shoot-btn.retry {
+    background-color: #ff4500 !important;
+    box-shadow: 0 5px #b23000 !important;
+}
+
+.result-img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 380px; height: 380px;
+    z-index: 1000; /* 最強 */
+}
+
+.q5-controls {
+    margin-top: 30px;
+    position: relative;
+    z-index: 1000; /* 影より上 */
+}
+
+/* 終了時の濃紺ボタン */
+#q5-shoot-btn.finish {
+    background-color: #001f3f !important; /* 濃紺 */
+    box-shadow: 0 5px #001021 !important;
+    color: white !important;
+}
+
+#q5-shoot-btn.next { background-color: #007bff !important; box-shadow: 0 5px #0056b3 !important; }
+#q5-shoot-btn.retry { background-color: #ff4500 !important; box-shadow: 0 5px #b23000 !important; }
