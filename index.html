@@ -12,7 +12,11 @@
 </head>
 <!-- <body onload="startLoading()" ontouchstart=""> -->
 <body onload="init()" ontouchstart="">
-    <div id="loading-screen">
+    <div id="go-screen">
+        <button id="go-btn" onclick="pressGo()">GO</button>
+    </div>
+
+    <div id="loading-screen" style="display:none">
         <div class="loading-text">Loading<span id="dots"></span></div>
     </div>
 

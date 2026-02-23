@@ -1,11 +1,35 @@
 // 本番 / デバッグ振り分け（URLに ?debug があればデバッグモード）
 function init() {
-    const isDebug = new URLSearchParams(window.location.search).has('debug');
-    if (isDebug) {
-        debugManager();
-    } else {
-        startLoading();
+    try {
+        const isDebug = window.location.search.indexOf('debug') !== -1;
+        if (isDebug) {
+            document.getElementById('go-screen').style.display = 'none';
+            debugManager();
+            // ?debug=q4 のようにページ指定があれば自動でジャンプ
+            const pageParam = window.location.search.match(/debug=([^&]+)/);
+            if (pageParam && pageParam[1]) {
+                const sel = document.getElementById('page-select');
+                if (sel) sel.value = pageParam[1];
+            }
+            launchDebugPage();
+        }
+        // 本番はGOボタン待機（pressGo()で開始）
+    } catch(e) {
+        pressGo();
     }
+}
+
+function pressGo() {
+    // BGM即再生（ユーザー操作後なのでAutoplay制限に引っかからない）
+    window.birthdayBgm = new Audio('bgm/birthdayreggae.mp3');
+    window.birthdayBgm.loop = true;
+    window.birthdayBgm.play().catch(() => {});
+
+    // GOスクリーンを消してロード開始
+    document.getElementById('go-screen').style.display = 'none';
+    const loader = document.getElementById('loading-screen');
+    loader.style.display = 'flex';
+    startLoading();
 }
 
 // 1. ページが読み込まれたらまずこれを実行
@@ -48,17 +72,12 @@ function startAnimation() {
         });
     }, 100);
 
-    // BGM: birthdayreggae（TOP画面から Q2開始まで）
-    window.birthdayBgm = new Audio('bgm/birthdayreggae.mp3');
-    window.birthdayBgm.loop = true;
-    window.birthdayBgm.play().catch(() => {
-        // モバイルのAutoplay制限対策：初回タッチで再生
-        const resume = () => {
-            window.birthdayBgm.play().catch(() => {});
-        };
-        document.addEventListener('touchstart', resume, { once: true });
-        document.addEventListener('click', resume, { once: true });
-    });
+    // BGM: pressGo()で既に再生済みのため二重再生しない
+    if (!window.birthdayBgm) {
+        window.birthdayBgm = new Audio('bgm/birthdayreggae.mp3');
+        window.birthdayBgm.loop = true;
+        window.birthdayBgm.play().catch(() => {});
+    }
 }
 
 // 【修正版】トップからQ1へ
