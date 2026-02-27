@@ -188,7 +188,7 @@ img { width: 100%; height: auto; display: block; }
     top: 0; 
     left: 0; 
     width: 100vw; 
-    height: 100vh;
+    height: 100dvh;
     background-color: black;
     z-index: 9999;
     pointer-events: none; 
@@ -206,14 +206,14 @@ img { width: 100%; height: auto; display: block; }
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
 
 #quest-screen {
     position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
+    top: 0; left: 0; width: 100vw; height: 100dvh;
     background-color: black;
     display: flex;
     justify-content: center;
@@ -233,7 +233,7 @@ img { width: 100%; height: auto; display: block; }
 .q1-container {
     position: fixed;
     top: 0; left: 0; 
-    width: 100vw; height: 100vh;
+    width: 100vw; height: 100dvh;
     z-index: 9998;
     display: none; 
     opacity: 0;
@@ -257,7 +257,7 @@ img { width: 100%; height: auto; display: block; }
     transform: translateX(-50%);
     width: 100%;       /* 横幅は画面いっぱいに広がる許可を出す */
     max-width: 402px;  /* でもiPhone 16 Proの幅以上には広げない */
-    height: 100vh;     /* 高さは常に画面いっぱい */
+    height: 100dvh;     /* 高さは常に画面いっぱい */
     
     /* 縦横比を維持したまま、画面を埋め尽くす（左右がカットされる） */
     object-fit: cover; 
@@ -270,7 +270,7 @@ img { width: 100%; height: auto; display: block; }
     position: fixed;
     top: 0; left: 0; 
     width: 100vw; 
-    height: 100vh;
+    height: 100dvh;
     z-index: 9998;
     display: none; 
     opacity: 0;
@@ -287,8 +287,8 @@ img { width: 100%; height: auto; display: block; }
     position: relative;
     width: 100%;
     max-width: 402px;
-    /* height: 100vh; ← これを消して min-height に変える */
-    min-height: 100vh; 
+    /* height: 100dvh; ← これを消して min-height に変える */
+    min-height: 100dvh; 
     margin: 0 auto;
     z-index: 2;
     display: flex;

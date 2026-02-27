@@ -1,13 +1,13 @@
 .q2-container {
     position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
+    top: 0; left: 0; width: 100vw; height: 100dvh;
     z-index: 10000;
     display: none; /* JSで active 時に block にする */
     background: #000;
 }
 
 #q2-content {
-    height: 100vh;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;

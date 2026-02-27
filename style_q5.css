@@ -57,7 +57,7 @@
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     z-index: 9999; /* TOPやQ1と同じ、あるいはそれ以上の強さにする */
     display: flex;
     flex-direction: column;
@@ -166,7 +166,7 @@
     content: "";
     position: fixed;
     top: 0; left: 0;
-    width: 100vw; height: 100vh;
+    width: 100vw; height: 100dvh;
     background: rgba(0, 0, 0, 0.7);
     z-index: 100; /* 500から100に下げる💅 */
     opacity: 0;
